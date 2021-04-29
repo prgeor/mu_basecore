@@ -8,7 +8,7 @@
 # Copyright (c) 2016, Linaro Ltd. All rights reserved.<BR>
 # (C) Copyright 2016 - 2019 Hewlett Packard Enterprise Development LP<BR>
 # Copyright (c) 2017, AMD Incorporated. All rights reserved.<BR>
-# Copyright (c) 2016, Microsoft Corporation<BR>
+# Copyright (C) Microsoft Corporation
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
 ##
@@ -66,7 +66,7 @@
   ##  @libraryclass  Provide platform specific hooks.
   #
   PlatformHookLib|Include/Library/PlatformHookLib.h
-  
+
   ##  @libraryclass  Provide platform specific hooks for SMM core.
   #
   SmmCorePlatformHookLib|Include/Library/SmmCorePlatformHookLib.h
@@ -179,6 +179,16 @@
   ## @libraryclass Provides a way to store and update the current device state
   #
   DeviceStateLib|Include/Library/DeviceStateLib.h
+
+  ## MU_CHANGE - Add AdvLoggerAccessLib to MdeModulePkg
+  ## @libraryclass Provides an interface for AdvLogger through GetVariable
+  #
+  AdvLoggerAccessLib|Include/Library/AdvLoggerAccessLib.h
+
+  # MU_CHANGE - Add MemoryProtectionLib to MdeModulePkg
+  ## @libraryclass Provides a way to toggle memory protection settings
+  #
+  MemoryProtectionLib|Include/Library/MemoryProtectionLib.h
 
 [Guids]
   ## MdeModule package token space guid
@@ -422,6 +432,12 @@
   gNVMeEnableStartEventGroupGuid = { 0x4754469d, 0x6528, 0x4dfc, {0x84, 0xaa, 0x8c, 0x8a, 0x03, 0xa2, 0x15, 0x8b}}
   # {da383315-906b-486f-80db-847f268451e4}
   gNVMeEnableCompleteEventGroupGuid = { 0xda383315, 0x906b, 0x486f, {0x80, 0xdb, 0x84, 0x7f, 0x26, 0x84, 0x51, 0xe4}}
+
+
+  ## Advanced Logger Variable Guid. This variable guid is used to access the log data via GetVariable.
+  #
+  gAdvLoggerAccessGuid = { 0xa021bf2b, 0x34ed, 0x4a98, {0x85, 0x9c, 0x42, 0x0e, 0xf9, 0x4f, 0x3e, 0x94 }}
+
 ## MSCHANGE END
 
   # MU_CHANGE - Add an MM communication GUID for the SW MMI handler.
@@ -943,9 +959,9 @@
   #   FALSE - Does not support process non-reset capsule image at runtime.<BR>
   # @Prompt Enable process non-reset capsule image at runtime.
   gEfiMdeModulePkgTokenSpaceGuid.PcdSupportProcessCapsuleAtRuntime|FALSE|BOOLEAN|0x00010079
-  
+
   ## MU_CHANGE
-  ## Indicates that the system should not automatically enable BME on P2P bridges until a subordinate 
+  ## Indicates that the system should not automatically enable BME on P2P bridges until a subordinate
   #  device has its Bus Master Enable bit set by a call to PciIo->SetAttributes.
   #  Note: Some UEFI drivers are not compliant and do not correctly call SetAttributes before attempting
   #  DMA operations. For these drivers, this setting will cause a functionality break.
@@ -1144,6 +1160,16 @@
   #   FALSE - UEFI Stack Guard will be disabled.<BR>
   # @Prompt Enable UEFI Stack Guard.
   gEfiMdeModulePkgTokenSpaceGuid.PcdCpuStackGuard|FALSE|BOOLEAN|0x30001055
+
+  # MU_CHANGE TCBZ1086 [BEGIN] - Mitigate potential system brick due to uefi MemoryTypeInformation var changes
+  ## Maximum total pages that can be reserved by MemoryTypeInfo buckets.
+  # Size in pages. Current default is roughly 1.6GB.
+  gEfiMdeModulePkgTokenSpaceGuid.PcdMaxMemoryTypeInfoPages            |0x60000|UINT32|0x40000150
+  # MU_CHANGE TCBZ1086 [END]
+
+  # MU_CHANGE [BEGIN] - Support alternative hardware queue sizes in NVME driver
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSupportAlternativeQueueSize|FALSE|BOOLEAN|0x40000151
+  # MU_CHANGE [END]
 
 [PcdsFixedAtBuild, PcdsPatchableInModule]
   ## Dynamic type PCD can be registered callback function for Pcd setting action.
@@ -2201,7 +2227,7 @@
   ## This dynamic PCD holds the device state bitmap as described in Include/Library/DeviceStateLib.h
   # @Prompt Describes device state
   gEfiMdeModulePkgTokenSpaceGuid.PcdDeviceStateBitmask|0x00000000|UINT32|0x00030007
-  
+
 [PcdsDynamicEx]
   ## This dynamic PCD enables the default variable setting.
   #  Its value is the default store ID value. The default value is zero as Standard default.

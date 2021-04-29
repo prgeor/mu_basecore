@@ -2,9 +2,12 @@
 Project Mu Basecore Repository
 ==============================
 
-.. |build_status_windows| image:: https://dev.azure.com/projectmu/mu/_apis/build/status/mu_basecore%20PR%20gate?branchName=release/202002
-
-|build_status_windows| Current build status for release/202002
+============================= ================= =============== ===================
+ Host Type & Toolchain        Build Status      Test Status     Code Coverage
+============================= ================= =============== ===================
+Windows_VS2019_               |WindowsCiBuild|  |WindowsCiTest| |WindowsCiCoverage|
+Ubuntu_GCC5_                  |UbuntuCiBuild|   |UbuntuCiTest|  |UbuntuCiCoverage|
+============================= ================= =============== ===================
 
 This repository is part of Project Mu.  Please see Project Mu for details https://microsoft.github.io/mu
 
@@ -12,31 +15,31 @@ Branch Status - release/202002
 ==============================
 
 Status:
-  In Development
+  Stabilized
 
 Entered Development:
   2002/03/05
 
-Anticipated Stabilization:
-  May 2020
+Stabilized:
+  2002/07/06
 
 Branch Changes - release/202002
 ===============================
 
-Breaking Changes-dev
---------------------
-
-- None
-
-Main Changes-dev
+Breaking Changes
 ----------------
 
 - None
 
-Bug Fixes-dev
--------------
+Main Changes
+------------
 
 - None
+
+Bug Fixes
+---------
+
+- Fix for Tianocore Bugzilla 2753 for extending EBS properly into the TPM
 
 2002_RefBoot Changes
 --------------------
@@ -133,3 +136,21 @@ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
 CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
+
+.. ===================================================================
+.. This is a bunch of directives to make the README file more readable
+.. ===================================================================
+
+.. CoreCI
+
+.. _Windows_VS2019: https://dev.azure.com/projectmu/mu/_build/latest?definitionId=39&&branchName=release%2F202002
+.. |WindowsCiBuild| image:: https://dev.azure.com/projectmu/mu/_apis/build/status/CI/Mu%20Basecore%20CI%20VS2019?branchName=release%2F202002
+.. |WindowsCiTest| image:: https://img.shields.io/azure-devops/tests/projectmu/mu/39.svg
+.. |WindowsCiCoverage| image:: https://img.shields.io/badge/coverage-coming_soon-blue
+
+.. _Ubuntu_GCC5: https://dev.azure.com/projectmu/mu/_build/latest?definitionId=40&branchName=release%2F202002
+.. |UbuntuCiBuild| image:: https://dev.azure.com/projectmu/mu/_apis/build/status/CI/Mu%20Basecore%20CI%20Ubuntu%20GCC5?branchName=release%2F202002
+.. |UbuntuCiTest| image:: https://img.shields.io/azure-devops/tests/projectmu/mu/40.svg
+.. |UbuntuCiCoverage| image:: https://img.shields.io/badge/coverage-coming_soon-blue
+
+.. |build_status_windows| image:: https://dev.azure.com/projectmu/mu/_apis/build/status/CI/Mu%20Basecore%20CI%20VS2019?branchName=release%2F202002

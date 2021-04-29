@@ -18,6 +18,8 @@
 
 Copyright (c) 2006 - 2020, Intel Corporation. All rights reserved.<BR>
 (C) Copyright 2015-2018 Hewlett Packard Enterprise Development LP<BR>
+Copyright (c) Microsoft Corporation.<BR>
+
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -2457,12 +2459,6 @@ VariableServiceGetVariable (
     goto Done;
   }
 
-  // MU_CHANGE [BEGIN] - TCBZ2062 - Attributes must be set even on EFI_BUFFER_TOO_SMALL.
-  if (Attributes != NULL) {
-    *Attributes = Variable.CurrPtr->Attributes;
-  }
-  // MU_CHANGE [END]
-
   //
   // Get data size
   //
@@ -2476,11 +2472,6 @@ VariableServiceGetVariable (
     }
 
     CopyMem (Data, GetVariableDataPtr (Variable.CurrPtr, mVariableModuleGlobal->VariableGlobal.AuthFormat), VarDataSize);
-    // MU_CHANGE [BEGIN] - TCBZ2062 - Attributes must be set even on EFI_BUFFER_TOO_SMALL.
-    // if (Attributes != NULL) {
-    //   *Attributes = Variable.CurrPtr->Attributes;
-    // }
-    // MU_CHANGE [END]
 
     *DataSize = VarDataSize;
     UpdateVariableInfo (VariableName, VendorGuid, Variable.Volatile, TRUE, FALSE, FALSE, FALSE, &gVariableInfo);
@@ -2494,6 +2485,11 @@ VariableServiceGetVariable (
   }
 
 Done:
+  if (Status == EFI_SUCCESS || Status == EFI_BUFFER_TOO_SMALL) {
+    if (Attributes != NULL && Variable.CurrPtr != NULL) {
+      *Attributes = Variable.CurrPtr->Attributes;
+    }
+  }
   ReleaseLockOnlyAtBootTime (&mVariableModuleGlobal->VariableGlobal.VariableServicesLock);
   return Status;
 }
@@ -3209,6 +3205,7 @@ ReclaimForOS(
   // Check if the free area is below a threshold.
   //
   if (((RemainingCommonRuntimeVariableSpace < mVariableModuleGlobal->MaxVariableSize) ||
+        // MS_CHANGE Starts: HwError record quata state should not trigger variable store reclaim
       // (RemainingCommonRuntimeVariableSpace < mVariableModuleGlobal->MaxAuthVariableSize)) ||
        (RemainingCommonRuntimeVariableSpace < mVariableModuleGlobal->MaxAuthVariableSize))){
       //((PcdGet32 (PcdHwErrStorageSize) != 0) &&

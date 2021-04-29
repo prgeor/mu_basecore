@@ -19,6 +19,7 @@
 #  the authentication service provided in this driver will be broken, and the behavior is undefined.
 #
 # Copyright (c) 2010 - 2019, Intel Corporation. All rights reserved.<BR>
+# Copyright (C) Microsoft Corporation
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
 ##
@@ -81,6 +82,8 @@
   ## MU_CHANGE - Remove VariableLockRequestToLock() in lieu of VariablePolicy.
   MuVariablePolicyHelperLib
   UefiVariablePolicyLib
+  AdvLoggerAccessLib                            ## MU_CHANGE
+  MemoryTypeInfoSecVarCheckLib  # MU_CHANGE TCBZ1086 - Mitigate potential system brick due to UEFI MemoryTypeInformation var changes
 
 [Protocols]
   gEfiSmmFirmwareVolumeBlockProtocolGuid        ## CONSUMES
@@ -124,6 +127,7 @@
   ## SOMETIMES_CONSUMES   ## Variable:L"VarErrorFlag"
   ## SOMETIMES_PRODUCES   ## Variable:L"VarErrorFlag"
   gEdkiiVarErrorFlagGuid
+  gAdvLoggerAccessGuid                                               ## CONSUMES   MU_CHANGE
 
 [Pcd]
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize       ## CONSUMES
